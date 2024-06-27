@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f2f2f2;
+        }
+        .player {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .album-cover {
+            width: 100%;
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .playlist {
+            list-style-type: none;
+            padding: 0;
+        }
+        .playlist li {
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .playlist li:hover {
+            background-color: #f2f2f2;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .controls button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007aff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="player">
+        <div class="album-cover" style="background-image: url('koala.jpeg');"></div>
+        <audio id="audio-player"></audio>
+        <ul class="playlist" id="playlist"></ul>
+        <div class="controls">
+            <button id="prev">Previous</button>
+            <button id="play">Play</button>
+            <button id="next">Next</button>
+        </div>
+    </div>
+
+    <script>
+        const playlist = [
+            { title: "Love Maybe", file: "song1.mp3" },
+            { title: "Perfect", file: "song2.mp3" },
+            { title: "Just The Way You Are", file: "song3.mp3" },
+            { title: "소나기", file: "song3.mp3" },
+        ];
+
+        const audioPlayer = document.getElementById('audio-player');
+        const playlistElement = document.getElementById('playlist');
+        const playButton = document.getElementById('play');
+        const prevButton = document.getElementById('prev');
+        const nextButton = document.getElementById('next');
+
+        let currentSongIndex = 0;
+
+        function loadPlaylist() {
+            playlistElement.innerHTML = '';
+            playlist.forEach((song, index) => {
+                const li = document.createElement('li');
+                li.textContent = song.title;
+                li.onclick = () => playSong(index);
+                playlistElement.appendChild(li);
+            });
+        }
+
+        function playSong(index) {
+            currentSongIndex = index;
+            audioPlayer.src = playlist[index].file;
+            audioPlayer.play();
+            updatePlayButton();
+        }
+
+        function togglePlay() {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+            } else {
+                audioPlayer.pause();
+            }
+            updatePlayButton();
+        }
+
+        function updatePlayButton() {
+            playButton.textContent = audioPlayer.paused ? 'Play' : 'Pause';
+        }
+
+        function playNext() {
+            currentSongIndex = (currentSongIndex + 1) % playlist.length;
+            playSong(currentSongIndex);
+        }
+
+        function playPrevious() {
+            currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+            playSong(currentSongIndex);
+        }
+
+        playButton.onclick = togglePlay;
+        nextButton.onclick = playNext;
+        prevButton.onclick = playPrevious;
+
+        loadPlaylist();
+        playSong(0);
+    </script>
+</body>
+</html>
