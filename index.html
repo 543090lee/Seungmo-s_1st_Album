@@ -3,84 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Player</title>
+    <title>iPod Music Player for Darlene</title>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 20px;
             background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        .player {
-            max-width: 400px;
-            margin: 0 auto;
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        .ipod {
+            width: 350px;
+            height: 600px;
+            background-color: #ffffff;
+            border-radius: 35px;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .screen {
+            height: 290px;
+            background-color: #000;
+            color: #fff;
+            padding: 25px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .playlist-title {
+            font-size: 21px;
+            font-weight: bold;
+            margin-bottom: 12px;
         }
         .album-cover {
-            width: 100%;
-            height: 300px;
+            width: 150px;
+            height: 150px;
+            background-color: #333;
+            margin: 0 auto 15px;
             background-size: cover;
             background-position: center;
             border-radius: 5px;
-            margin-bottom: 20px;
+        }
+        .now-playing {
+            font-size: 16px;
+            margin-bottom: 12px;
+            text-align: center;
         }
         .playlist {
             list-style-type: none;
             padding: 0;
+            margin: 0;
+            font-size: 16px;
+            overflow-y: auto;
+            flex-grow: 1;
         }
         .playlist li {
-            padding: 10px;
+            padding: 7px 0;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
         .playlist li:hover {
-            background-color: #f2f2f2;
+            background-color: #1e1e1e;
         }
-        .controls {
+        .click-wheel {
+            flex-grow: 1;
+            background-color: #e0e0e0;
+            border-radius: 0 0 35px 35px;
             display: flex;
             justify-content: center;
-            margin-top: 20px;
+            align-items: center;
+            position: relative;
         }
-        .controls button {
-            margin: 0 10px;
-            padding: 10px 20px;
-            font-size: 16px;
+        .wheel {
+            width: 240px;
+            height: 240px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .center-button {
+            width: 70px;
+            height: 70px;
+            background-color: #e0e0e0;
+            border-radius: 50%;
+        }
+        .menu-button {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .play-pause {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .prev-button {
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .easter-egg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000; /* Add this line */
+            width: 80%; /* Add this line */
+            max-width: 250px; /* Add this line */
+        }
+
+        .easter-egg p {
+            font-size: 18px;
+            color: #000;
+            margin-bottom: 15px;
+        }
+
+        .easter-egg button {
             background-color: #007aff;
             color: white;
             border: none;
+            padding: 5px 10px;
             border-radius: 5px;
             cursor: pointer;
+        }
+        .next-button {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
-    <div class="player">
-        <div class="album-cover" style="background-image: url('koala.jpeg');"></div>
-        <audio id="audio-player"></audio>
-        <ul class="playlist" id="playlist"></ul>
-        <div class="controls">
-            <button id="prev">Previous</button>
-            <button id="play">Play</button>
-            <button id="next">Next</button>
+    <div class="ipod">
+        <div class="screen">
+            <div class="playlist-title">Seungmo's Album for Darlene</div>
+            <div class="album-cover" id="album-cover"></div>
+            <div class="now-playing" id="now-playing">Now Playing: </div>
+            <ul class="playlist" id="playlist"></ul>
+            <div class="easter-egg" id="easter-egg">
+                <p>다 들어줘서 고마워 ㅎㅎ, 이 노래는 오직 단 한명의 팬, 바로 너를 위해 만든 앨범이야. 자기전에 들어도 좋고, 내 목소리가 그리울때
+                    들어도돼. 이 노래들을 듣고 너가 행복했으면 좋겠고 많이 사랑해 달린아.
+                </p>
+                <button id="close-easter-egg">Close</button>
+            </div>
+        </div>
+        <div class="click-wheel">
+            <div class="wheel">
+                <div class="center-button"></div>
+            </div>
+            <div class="menu-button">MENU</div>
+            <div class="play-pause" id="play-pause">Play</div>
+            <div class="prev-button" id="prev">◀◀</div>
+            <div class="next-button" id="next">▶▶</div>
         </div>
     </div>
 
     <script>
         const playlist = [
-            { title: "Love Maybe", file: "suddenrain.mp3" },
-            { title: "Perfect", file: "suddenrain.mp3" },
-            { title: "Just The Way You Are", file: "suddenrain.mp3" },
-            { title: "소나기 from  Lovely Runner", file: "suddenrain.mp3" },
+            { title: "Love Maybe", file: "suddenrain.mp3" , cover:"koala.jpeg" },
+            { title: "Perfect", file: "suddenrain.mp3" , cover:"koala.jpeg"},
+            { title: "Just The Way You Are", file: "suddenrain.mp3", cover:"koala.jpeg" },
+            { title: "소나기 from  Lovely Runner", file: "suddenrain.mp3" , cover:"koala.jpeg" },
         ];
 
-        const audioPlayer = document.getElementById('audio-player');
+        const audioPlayer = new Audio();
         const playlistElement = document.getElementById('playlist');
-        const playButton = document.getElementById('play');
+        const playPauseButton = document.getElementById('play-pause');
         const prevButton = document.getElementById('prev');
         const nextButton = document.getElementById('next');
+        const nowPlayingElement = document.getElementById('now-playing');
+        const albumCoverElement = document.getElementById('album-cover');
+        const easterEggElement = document.getElementById('easter-egg');
+        const closeEasterEggButton = document.getElementById('close-easter-egg');
 
         let currentSongIndex = 0;
 
@@ -98,7 +216,9 @@
             currentSongIndex = index;
             audioPlayer.src = playlist[index].file;
             audioPlayer.play();
-            updatePlayButton();
+            updateNowPlaying();
+            updateAlbumCover();
+            updatePlayPauseButton();
         }
 
         function togglePlay() {
@@ -107,11 +227,19 @@
             } else {
                 audioPlayer.pause();
             }
-            updatePlayButton();
+            updatePlayPauseButton();
         }
 
-        function updatePlayButton() {
-            playButton.textContent = audioPlayer.paused ? 'Play' : 'Pause';
+        function updatePlayPauseButton() {
+            playPauseButton.textContent = audioPlayer.paused ? 'Play' : 'Pause';
+        }
+
+        function updateNowPlaying() {
+            nowPlayingElement.textContent = 'Now Playing: ' + playlist[currentSongIndex].title;
+        }
+
+        function updateAlbumCover() {
+            albumCoverElement.style.backgroundImage = `url('${playlist[currentSongIndex].cover}')`;
         }
 
         function playNext() {
@@ -124,9 +252,24 @@
             playSong(currentSongIndex);
         }
 
-        playButton.onclick = togglePlay;
+        function showEasterEgg() {
+            easterEggElement.style.display = 'block';
+        }
+
+        function hideEasterEgg() {
+            easterEggElement.style.display = 'none';
+        }
+        playPauseButton.onclick = togglePlay;
         nextButton.onclick = playNext;
         prevButton.onclick = playPrevious;
+        closeEasterEggButton.onclick = hideEasterEgg;
+
+        audioPlayer.addEventListener('ended', () => {
+        showEasterEgg();
+        audioPlayer.currentTime = 0;  
+        audioPlayer.pause();  
+        updatePlayPauseButton();  
+    });
 
         loadPlaylist();
         playSong(0);

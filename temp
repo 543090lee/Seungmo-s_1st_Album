@@ -1,0 +1,6 @@
+const playlist = [
+            { title: "Love Maybe", file: "suddenrain.mp3" },
+            { title: "Perfect", file: "suddenrain.mp3" },
+            { title: "Just The Way You Are", file: "suddenrain.mp3" },
+            { title: "소나기 from  Lovely Runner", file: "suddenrain.mp3" },
+        ];
